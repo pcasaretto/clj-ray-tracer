@@ -11,7 +11,7 @@
 (defn aprox [x y]
   (->
    (- x y)
-   (math/abs)
+   math/abs
    (<= epsilon)))
 
 (s/fdef aprox
