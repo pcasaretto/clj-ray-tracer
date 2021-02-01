@@ -7,6 +7,22 @@
 
 (-> (stest/enumerate-namespace `clj-ray-tracer.core) stest/check)
 
+(deftest aprox-vector-test
+  (testing "equal vectors are aproximately equal"
+    (let
+        [v (gen/generate (s/gen ::core/tuple3d))]
+      (is (core/aprox-vector v v))))
+  (testing "vectors with diffs larger than epsilon are not aproximately equal"
+    (let
+        [v1 (gen/generate (s/gen ::core/tuple3d))
+         v2 (update v1 1 (partial + (* 2 core/epsilon)))]
+      (is (not (core/aprox-vector v1 v2)))))
+  (testing "vectors with diffs smaller than epsilon are aproximately equal"
+    (let
+        [v1 (gen/generate (s/gen ::core/tuple3d))
+         v2 (update v1 1 (partial + (/ core/epsilon 2)))]
+      (is (core/aprox-vector v1 v2)))))
+
 (deftest vector-create-test
   (testing "creating a vector"
     (is (core/aprox-vector
