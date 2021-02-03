@@ -37,7 +37,7 @@
 (defn vector-sum
   ( [v1] v1)
   ( [ v1 & more]
-    (->> (apply merge-with vector v1 more)
+    (->> (apply merge-with (comp flatten vector) v1 more)
         (update-map (partial apply +)))))
 
 (s/fdef vector-sum
@@ -47,7 +47,7 @@
 (defn vector-subtraction
   ( [v1] v1)
   ( [ v1 & more]
-   (->> (apply merge-with vector v1 more)
+   (->> (apply merge-with (comp flatten vector) v1 more)
         (update-map (partial apply -)))))
 
 (s/fdef vector-subtraction
@@ -68,24 +68,24 @@
        (reduce +)
        (math/sqrt)))
 
-(->> (gen/generate (s/gen ::tuple3d))
-  vals
-  (map #(math/expt % 2))
-  (reduce +)
-  (math/sqrt))
-
 (s/fdef vector-magnitude
   :args (s/cat :v ::tuple3d)
-  :ret ::valid_double)
+  :ret (s/double-in :min 0.0 :NaN? false :infinite false))
 
 (defn vector-normalization [v]
   (let [magnitude (vector-magnitude v)]
-    (update-map #(/ % magnitude) v)))
+    (try
+      (update-map #(/ % magnitude) v)
+      (catch ArithmeticException e
+        { :x 0.0 :y 0.0 :z 0.0}))))
+
 
 (s/fdef vector-normalization
   :args (s/cat :v ::tuple3d)
   :ret ::tuple3d
-  :fn #(aprox 1.0 (vector-magnitude (:ret %))))
+  :fn (s/or
+       :unit #(aprox (vector-magnitude (:ret %)) 1.0)
+       :zero #(aprox (vector-magnitude (:ret %)) 0.0)))
 
 (defn -main
   "I don't do a whole lot ... yet."
