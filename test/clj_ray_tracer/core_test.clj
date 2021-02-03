@@ -90,17 +90,17 @@
 
 (deftest vector-magnitude-test
   (testing "magnitude of a one dimensional unit vector is one"
-    (is (=
+    (is (core/aprox
          1
          (core/vector-magnitude {:x 1 :y 0 :z 0})))
-    (is (=
+    (is (core/aprox
          1
          (core/vector-magnitude {:x 0 :y 1 :z 0})))
-    (is (=
+    (is (core/aprox
          1
          (core/vector-magnitude {:x 0 :y 0 :z 1}))))
   (testing "perfect squares"
-    (is (=
+    (is (core/aprox
           13
           (core/vector-magnitude {:x 3 :y 4 :z 12})))))
 
@@ -108,4 +108,10 @@
   (testing "simple normalization"
     (is (core/aprox-vector
          { :x 1 :y 0 :z 0}
-         (core/vector-normalization { :x 4 :y 0 :z 0})))))
+         (core/vector-normalization { :x 4 :y 0 :z 0}))))
+  (testing "a normalized vector has magnitude of 1"
+    (is (core/aprox
+          1
+          (-> (gen/generate (s/gen ::core/tuple3d))
+              (core/vector-normalization)
+              (core/vector-magnitude))))))
