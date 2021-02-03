@@ -4,7 +4,13 @@
   (:gen-class))
 
 (s/def ::valid_double (s/double-in :NaN? false :infinite? false :min -2e9 :max 2e9))
-(s/def ::tuple3d (s/tuple ::valid_double ::valid_double ::valid_double))
+(s/def ::x ::valid_double)
+(s/def ::y ::valid_double)
+(s/def ::z ::valid_double)
+(s/def ::tuple3d (s/keys :req-un [::x ::y ::z]))
+
+(defn update-map [f m]
+  (reduce (fn [altered-map [k v]] (assoc altered-map k (f v))) {} m))
 
 (def epsilon 1e-10)
 
@@ -19,10 +25,10 @@
   :ret boolean?)
 
 (defn aprox-vector [v1 v2]
-  (->> (interleave v1 v2)
-      (partition 2 2)
-      (mapv (partial apply aprox))
-      (every? true?)))
+  (->> (merge-with vector v1 v2)
+       vals
+       (map (partial apply aprox))
+       (every? true?)))
 
 (s/fdef aprox-vector
   :args (s/cat :v1 ::tuple3d :v2 ::tuple3d)
@@ -31,9 +37,8 @@
 (defn vector-sum
   ( [v1] v1)
   ( [ v1 & more]
-    (->> (apply interleave v1 more)
-        (partition 2 (inc ( count more)))
-        (mapv (partial apply +)))))
+    (->> (apply merge-with vector v1 more)
+        (update-map (partial apply +)))))
 
 (s/fdef vector-sum
         :args (s/+ ::tuple3d)
@@ -42,16 +47,15 @@
 (defn vector-subtraction
   ( [v1] v1)
   ( [ v1 & more]
-   (->> (apply interleave v1 more)
-        (partition 2 (inc ( count more)))
-        (mapv (partial apply -)))))
+   (->> (apply merge-with vector v1 more)
+        (update-map (partial apply -)))))
 
 (s/fdef vector-subtraction
         :args (s/+ ::tuple3d)
         :ret ::tuple3d)
 
 (defn vector-negation [v]
-   (mapv - v))
+   (update-map - v))
 
 (s/fdef vector-negation
         :args (s/cat :v ::tuple3d)
@@ -59,9 +63,16 @@
 
 (defn vector-magnitude [v]
   (->> v
-    (map #(math/expt % 2))
-    (reduce +)
-    (math/sqrt)))
+       vals
+       (map #(math/expt % 2))
+       (reduce +)
+       (math/sqrt)))
+
+(->> (gen/generate (s/gen ::tuple3d))
+  vals
+  (map #(math/expt % 2))
+  (reduce +)
+  (math/sqrt))
 
 (s/fdef vector-magnitude
   :args (s/cat :v ::tuple3d)
@@ -69,7 +80,7 @@
 
 (defn vector-normalization [v]
   (let [magnitude (vector-magnitude v)]
-    (mapv #(/ % magnitude) v)))
+    (update-map #(/ % magnitude) v)))
 
 (s/fdef vector-normalization
   :args (s/cat :v ::tuple3d)

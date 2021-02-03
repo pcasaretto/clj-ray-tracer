@@ -15,35 +15,29 @@
   (testing "vectors with diffs larger than epsilon are not aproximately equal"
     (let
         [v1 (gen/generate (s/gen ::core/tuple3d))
-         v2 (update v1 1 (partial + (* 2 core/epsilon)))]
+         v2 (update v1 :x (partial + (* 2 core/epsilon)))]
       (is (not (core/aprox-vector v1 v2)))))
   (testing "vectors with diffs smaller than epsilon are aproximately equal"
     (let
         [v1 (gen/generate (s/gen ::core/tuple3d))
-         v2 (update v1 1 (partial + (/ core/epsilon 2)))]
+         v2 (update v1 :x (partial + (/ core/epsilon 2)))]
       (is (core/aprox-vector v1 v2)))))
-
-(deftest vector-create-test
-  (testing "creating a vector"
-    (is (core/aprox-vector
-         [3 45 5]
-         (vector 3 45 5)))))
 
 (deftest vector-sum-test
   (testing "one argument"
     (is (core/aprox-vector
-         [3 4 5]
-         (core/vector-sum [3 4 5]))))
+         {:x 3 :y 4 :z 5}
+         (core/vector-sum {:x 3 :y 4 :z 5}))))
   (testing "simple vector sum"
     (is (core/aprox-vector
-         [5 9 11]
-         (core/vector-sum [3 4 5] [2 5 6]))))
+         {:x 5 :y 9 :z 11}
+         (core/vector-sum {:x 3 :y 4 :z 5} {:x 2 :y 5 :z 6}))))
   (testing "identity property"
     (let
       [v1 (gen/generate (s/gen ::core/tuple3d))]
       (is (core/aprox-vector
            v1
-           (core/vector-sum v1 [0 0 0])))))
+           (core/vector-sum v1 {:x 0 :y 0 :z 0})))))
   (testing "commutative property"
     (let
       [
@@ -65,53 +59,53 @@
 (deftest vector-subtration-test
   (testing "simple vector subtraction"
     (is (core/aprox-vector
-         [1 -1 -1]
-         (core/vector-subtraction [3 4 5] [2 5 6]))))
+         {:x -1 :y -1 :z -1}
+         (core/vector-subtraction {:x 3 :y 4 :z 5} {:x 4 :y 5 :z 6}))))
   (testing "identity property"
     (let
       [v1 (gen/generate (s/gen ::core/tuple3d))]
       (is (core/aprox-vector
            v1
-           (core/vector-subtraction v1 [0 0 0])))))
-  (testing ""
+           (core/vector-subtraction v1 {:x 0 :y 0 :z 0})))))
+  (testing "subracting a vector from itself results in the zero vector"
     (let
       [
        v1 (gen/generate (s/gen ::core/tuple3d))]
       (is (core/aprox-vector
-           [0.0 0.0 0.0]
+           { :x 0 :y 0 :z 0}
            (core/vector-subtraction v1 v1))))))
 
 (deftest vector-negation-test
   (testing "simple vector negation"
     (is (core/aprox-vector
-         [-3 -4 -5]
-         (core/vector-negation [3 4 5]))))
+         { :x -3 :y -4 :z -5}
+         (core/vector-negation { :x 3 :y 4 :z 5}))))
   (testing "a vector and its counterpart cancel each other"
     (let
       [
        v1 (gen/generate (s/gen ::core/tuple3d))]
       (is (core/aprox-vector
-           [0.0 0.0 0.0]
+           { :x 0 :y 0 :z 0}
            (core/vector-sum v1 (core/vector-negation v1)))))))
 
 (deftest vector-magnitude-test
   (testing "magnitude of a one dimensional unit vector is one"
     (is (=
          1
-         (core/vector-magnitude [1 0 0])))
+         (core/vector-magnitude {:x 1 :y 0 :z 0})))
     (is (=
          1
-         (core/vector-magnitude [0 1 0])))
+         (core/vector-magnitude {:x 0 :y 1 :z 0})))
     (is (=
          1
-         (core/vector-magnitude [0 0 1]))))
+         (core/vector-magnitude {:x 0 :y 0 :z 1}))))
   (testing "perfect squares"
     (is (=
           13
-          (core/vector-magnitude [3 4 12])))))
+          (core/vector-magnitude {:x 3 :y 4 :z 12})))))
 
 (deftest vector-normalization-test
   (testing "simple normalization"
     (is (core/aprox-vector
-         [1 0 0]
-         (core/vector-normalization [4 0 0])))))
+         { :x 1 :y 0 :z 0}
+         (core/vector-normalization { :x 4 :y 0 :z 0})))))
