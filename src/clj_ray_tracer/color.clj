@@ -35,27 +35,27 @@
       (->> (apply merge-with (comp flatten vector) c1 more)
            (core/update-map (partial apply f))))))
 
-(def sum (make-operation +))
+(def + (make-operation clojure.core/+))
 
-(s/fdef sum
+(s/fdef +
   :args (s/+ ::color)
   :ret ::color)
 
-(def subtract (make-operation -))
+(def - (make-operation clojure.core/-))
 
-(s/fdef subtract
+(s/fdef -
   :args (s/+ ::color)
   :ret ::color)
 
 (defn scalar-multiply [color factor]
   (core/update-map (partial * factor) color))
 
-(s/fdef subtract
+(s/fdef scalar-multiply
   :args (s/cat :color ::color :factor int?)
   :ret ::color)
 
-(def multiply (make-operation *))
+(def * (make-operation clojure.core/*))
 
-(s/fdef multiply
+(s/fdef *
   :args (s/+ ::color)
   :ret ::color)

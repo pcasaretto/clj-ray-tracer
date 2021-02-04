@@ -14,21 +14,21 @@
       (t/is (= -0.5 (:green color)))
       (t/is (= 1.7 (:blue color))))))
 
-(t/deftest color-sum-test
+(t/deftest color-+-test
   (t/testing "identity property"
     (let
         [c1 (gen/generate (s/gen ::sut/color))]
       (t/is (sut/=
               c1
-              (sut/sum c1 {:red 0 :green 0 :blue 0})))))
+              (sut/+ c1 {:red 0 :green 0 :blue 0})))))
   (t/testing "commutative property"
     (let
         [
          c1 (gen/generate (s/gen ::sut/color))
          v2 (gen/generate (s/gen ::sut/color))]
       (t/is (sut/=
-              (sut/sum v2 c1)
-              (sut/sum c1 v2)))))
+              (sut/+ v2 c1)
+              (sut/+ c1 v2)))))
   (t/testing "associative propery"
     (let
         [
@@ -36,27 +36,27 @@
          v2 (gen/generate (s/gen ::sut/color))
          v3 (gen/generate (s/gen ::sut/color))]
       (t/is (sut/=
-              (sut/sum c1 (sut/sum v2 v3))
-              (sut/sum (sut/sum c1 v2) v3))))))
+              (sut/+ c1 (sut/+ v2 v3))
+              (sut/+ (sut/+ c1 v2) v3))))))
 
-(t/deftest subtract-test
+(t/deftest --test
   (t/testing "simple color subtraction"
     (t/is (sut/=
             {:red -1 :green -1 :blue -1}
-            (sut/subtract {:red 3 :green 4 :blue 5} {:red 4 :green 5 :blue 6}))))
+            (sut/- {:red 3 :green 4 :blue 5} {:red 4 :green 5 :blue 6}))))
   (t/testing "identity property"
     (let
         [c1 (gen/generate (s/gen ::sut/color))]
       (t/is (sut/=
               c1
-              (sut/subtract c1 {:red 0 :green 0 :blue 0})))))
+              (sut/- c1 {:red 0 :green 0 :blue 0})))))
   (t/testing "subracting a vector from itself results in the zero vector"
     (let
         [
          c1 (gen/generate (s/gen ::sut/color))]
       (t/is (sut/=
               { :red 0.0 :green 0.0 :blue 0.0}
-              (sut/subtract c1 c1))))))
+              (sut/- c1 c1))))))
 
 (t/deftest scalar-multiply-test
   (t/testing "simple scalar multiplication"
@@ -64,8 +64,8 @@
            {:red 0.4 :green 0.6 :blue 0.8}
            (sut/scalar-multiply {:red 0.2 :green 0.3 :blue 0.4} 2)))))
 
-(t/deftest multiply-test
+(t/deftest *-test
   (t/testing "simple multiplication"
     (t/is (sut/=
            {:red 0.9 :green 0.2 :blue 0.04}
-           (sut/multiply {:red 1 :green 0.2 :blue 0.4} {:red 0.9 :green 1 :blue 0.1})))))
+           (sut/* {:red 1 :green 0.2 :blue 0.4} {:red 0.9 :green 1 :blue 0.1})))))
