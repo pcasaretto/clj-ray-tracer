@@ -9,4 +9,4 @@
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
-             :dev {:dependencies [[org.clojure/test.check "0.9.0"]]}}) 
+             :dev {:dependencies [[org.clojure/test.check "0.10.0"]]}}) 
