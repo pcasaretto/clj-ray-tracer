@@ -1,7 +1,7 @@
 (ns clj-ray-tracer.color
   (:require [clojure.spec.alpha :as s]
             [clojure.math.numeric-tower :as math]
-            [clj-ray-tracer.core :as core]))
+            [clj-ray-tracer.vector :as vector]))
 
 (s/def ::red (s/double-in :NaN? false :infinite? false))
 (s/def ::green (s/double-in :NaN? false :infinite? false))
@@ -21,7 +21,7 @@
 (defn = [c1 c2]
   (->> (merge-with vector c1 c2)
        vals
-       (map (partial apply core/aprox))
+       (map (partial apply vector/aprox))
        (every? true?)))
 
 (s/fdef =
@@ -33,7 +33,7 @@
     ( [c1] c1)
     ( [ c1 & more]
       (->> (apply merge-with (comp flatten vector) c1 more)
-           (core/update-map (partial apply f))))))
+           (vector/update-map (partial apply f))))))
 
 (def + (make-operation clojure.core/+))
 
@@ -48,7 +48,7 @@
   :ret ::color)
 
 (defn scalar-multiply [color factor]
-  (core/update-map (partial * factor) color))
+  (vector/update-map (partial * factor) color))
 
 (s/fdef scalar-multiply
   :args (s/cat :color ::color :factor int?)
