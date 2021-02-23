@@ -6,7 +6,6 @@
 
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
   (let
     [canvas (-> (canvas/canvas :width 5 :height 3)

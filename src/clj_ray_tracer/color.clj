@@ -1,7 +1,8 @@
 (ns clj-ray-tracer.color
   (:require [clojure.spec.alpha :as s]
             [clojure.math.numeric-tower :as math]
-            [clj-ray-tracer.vector :as vector]))
+            [clj-ray-tracer.vector :as vector]
+            [clojure.spec.gen.alpha :as gen]))
 
 (s/def ::red (s/double-in :NaN? false :infinite? false))
 (s/def ::green (s/double-in :NaN? false :infinite? false))
