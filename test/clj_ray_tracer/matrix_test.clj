@@ -74,9 +74,75 @@
       (t/is (=
              expected
              (sut/transpose in)))))
-  (t/testing "identity property"
+  (t/testing "transposing twice yields the same matrix"
     (let
-        [in (sut/identity 3)]
+        [m (gen/generate (s/gen ::sut/matrix))]
+        (t/is (= m (sut/transpose (sut/transpose m)))))))
+
+(t/deftest submatrix-test
+  (t/testing "simple submatrix specs"
+    (let
+        [in       [
+                   [1 5 0]
+                   [-3 2 7]
+                   [0 6 -3]]]
         (t/is (=
-                in
-                (sut/transpose in))))))
+                 [[-3 2]
+                  [0 6]]
+                (sut/submatrix in 0 2))))
+    (let
+        [in   [
+               [-6 1 1 6]
+               [-8 5 8 6]
+               [-1 0 8 2]
+               [-7 1 -1 1]]]
+        (t/is (=
+                [[-6 1 6]
+                 [-8 8 6]
+                 [-7 -1 1]]
+                (sut/submatrix in 2 1))))))
+
+(t/deftest cofactor-test
+  (t/testing "simple cofactor specs"
+    (let
+        [in       [
+                   [3 5 0]
+                   [2 -1 -7]
+                   [6 -1 5]]]
+      (t/is (=
+             56
+             (sut/cofactor in 0 0)))
+      (t/is (=
+             12
+             (sut/cofactor in 0 1)))
+      (t/is (=
+             56
+             (sut/cofactor in 0 2))))
+    (let
+        [in       [
+                   [1 2 6]
+                   [-5 8 -4]
+                   [2 6 4]]]
+        (t/is (=
+                56
+                (sut/cofactor in 0 0)))
+        (t/is (=
+                12
+                (sut/cofactor in 0 1)))
+        (t/is (=
+                56
+                (sut/cofactor in 0 2))))))
+
+(t/deftest determinant-test
+  (t/testing "simple determinant specs"
+    (let
+        [in       [
+                   [1 5]
+                   [-3 2]]]
+        (t/is (= 17 (sut/determinant in))))
+    (let
+        [in       [
+                   [1 2 6]
+                   [-5 8 -4]
+                   [2 6 4]]]
+        (t/is (= -196 (sut/determinant in))))))

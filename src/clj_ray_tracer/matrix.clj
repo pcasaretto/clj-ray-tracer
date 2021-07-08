@@ -49,3 +49,16 @@
       (vec
        (for [j (range 0 (height m))]
           (get-in m [j i]))))))
+
+(defn if-different [n]
+  #(if (not= %1) %2))
+
+(defn submatrix [m exclude-row exclude-column]
+  (keep-indexed
+   (fn [current-row row]
+     (if (not= current-row exclude-row)
+       (keep-indexed (fn [current-column column] (if (not= current-column exclude-column) column)) row)))
+   m))
+
+(defn cofactor [m row colum])
+(defn determinant [m])

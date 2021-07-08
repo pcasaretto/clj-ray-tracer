@@ -19,9 +19,7 @@
       flatten))
 
 (defn ^:private ppm-header [canvas]
-  ["P3"
-   (str (:width canvas) " " (:height canvas))
-   "255"])
+  ["P3" (str (:width canvas) " " (:height canvas)) "255"])
 
 
 (defn canvas->ppm [canvas]
@@ -35,10 +33,3 @@
            (map #(clojure.string/join " " %))
            vec
            (clojure.string/join \newline)))))
-
-(let
-    [canvas (-> (canvas/canvas :width 5 :height 3)
-                (canvas/assoc-pixel [0 0] ( color/color :red 1.5))
-                (canvas/assoc-pixel [2 1] ( color/color :green 0.5))
-                (canvas/assoc-pixel [4 2] ( color/color :red -0.5 :blue 1.0)))]
-    (canvas->ppm canvas))
