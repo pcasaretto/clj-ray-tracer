@@ -54,11 +54,22 @@
   #(if (not= %1) %2))
 
 (defn submatrix [m exclude-row exclude-column]
-  (keep-indexed
-   (fn [current-row row]
-     (if (not= current-row exclude-row)
-       (keep-indexed (fn [current-column column] (if (not= current-column exclude-column) column)) row)))
-   m))
+  (vec
+    (keep-indexed
+       (fn [current-row row]
+         (if (not= current-row exclude-row)
+           (vec
+            (keep-indexed (fn [current-column column] (if (not= current-column exclude-column) column)) row))))
+       m)))
+
+(defn determinant [m]
+  (clojure.core/-
+    (clojure.core/* (get-in m [ 0 0 ]) (get-in m [ 1 1]))
+    (clojure.core/* (get-in m [ 1 0 ]) (get-in m [ 0 1]))))
+
+(defn minor [m exclude-row exclude-column]
+  (-> m
+      (submatrix exclude-row exclude-column)
+      (determinant)))
 
 (defn cofactor [m row colum])
-(defn determinant [m])

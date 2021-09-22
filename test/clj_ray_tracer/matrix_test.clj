@@ -102,47 +102,60 @@
                  [-7 -1 1]]
                 (sut/submatrix in 2 1))))))
 
-(t/deftest cofactor-test
-  (t/testing "simple cofactor specs"
+(t/deftest minor-test
+  (t/testing "simple minor specs"
     (let
         [in       [
                    [3 5 0]
                    [2 -1 -7]
                    [6 -1 5]]]
-      (t/is (=
-             56
-             (sut/cofactor in 0 0)))
-      (t/is (=
-             12
-             (sut/cofactor in 0 1)))
-      (t/is (=
-             56
-             (sut/cofactor in 0 2))))
-    (let
-        [in       [
-                   [1 2 6]
-                   [-5 8 -4]
-                   [2 6 4]]]
-        (t/is (=
-                56
-                (sut/cofactor in 0 0)))
-        (t/is (=
-                12
-                (sut/cofactor in 0 1)))
-        (t/is (=
-                56
-                (sut/cofactor in 0 2))))))
 
-(t/deftest determinant-test
-  (t/testing "simple determinant specs"
-    (let
-        [in       [
-                   [1 5]
-                   [-3 2]]]
-        (t/is (= 17 (sut/determinant in))))
-    (let
-        [in       [
-                   [1 2 6]
-                   [-5 8 -4]
-                   [2 6 4]]]
-        (t/is (= -196 (sut/determinant in))))))
+        (t/is (=
+                25
+                (sut/minor in 1 0))))))
+
+
+;; (t/deftest cofactor-test
+;;   (t/testing "simple cofactor specs"
+;;     (let
+;;         [in       [
+;;                    [3 5 0]
+;;                    [2 -1 -7]
+;;                    [6 -1 5]]]
+;;       (t/is (=
+;;              56
+;;              (sut/cofactor in 0 0)))
+;;       (t/is (=
+;;              12
+;;              (sut/cofactor in 0 1)))
+;;       (t/is (=
+;;              56
+;;              (sut/cofactor in 0 2))))
+;;     (let
+;;         [in       [
+;;                    [1 2 6]
+;;                    [-5 8 -4]
+;;                    [2 6 4]]]
+;;         (t/is (=
+;;                 56
+;;                 (sut/cofactor in 0 0)))
+;;         (t/is (=
+;;                 12
+;;                 (sut/cofactor in 0 1)))
+;;         (t/is (=
+;;                 56
+;;                 (sut/cofactor in 0 2))))))
+
+;; (t/deftest determinant-test
+;;   (t/testing "simple determinant specs"
+;;     (let
+;;         [in       [
+;;                    [1 5]
+;;                    [-3 2]]]
+;;         (t/is (= 17 (sut/determinant in))))
+;;     (let
+;;         [in       [
+;;                    [1 2 6]
+;;                    [-5 8 -4]
+;;                    [2 6 4]]]
+;;         (t/is (= -196 (sut/determinant in))))))
