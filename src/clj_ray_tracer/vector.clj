@@ -23,65 +23,65 @@
   :args (s/cat :x ::valid_double :y ::valid_double)
   :ret boolean?)
 
-(defn aprox-vector [v1 v2]
+(defn ish? [v1 v2]
   (->> (merge-with vector v1 v2)
        vals
        (map (partial apply aprox))
        (every? true?)))
 
-(s/fdef aprox-vector
+(s/fdef ish?
   :args (s/cat :v1 ::tuple3d :v2 ::tuple3d)
   :ret boolean?)
 
-(defn vector-sum
+(defn +
   ( [v1] v1)
   ( [ v1 & more]
     (->> (apply merge-with (comp flatten vector) v1 more)
-        (update-map (partial apply +)))))
+        (update-map (partial apply clojure.core/+)))))
 
-(s/fdef vector-sum
+(s/fdef +
         :args (s/+ ::tuple3d)
         :ret ::tuple3d)
 
-(defn vector-subtraction
+(defn -
   ( [v1] v1)
   ( [ v1 & more]
    (->> (apply merge-with (comp flatten vector) v1 more)
-        (update-map (partial apply -)))))
+        (update-map (partial apply clojure.core/-)))))
 
-(s/fdef vector-subtraction
+(s/fdef -
         :args (s/+ ::tuple3d)
         :ret ::tuple3d)
 
-(defn vector-negation [v]
-   (update-map - v))
+(defn negate [v]
+   (update-map clojure.core/- v))
 
-(s/fdef vector-negation
+(s/fdef negate
         :args (s/cat :v ::tuple3d)
         :ret ::tuple3d)
 
-(defn vector-magnitude [v]
+(defn magnitude [v]
   (->> v
        vals
        (map #(math/expt % 2))
-       (reduce +)
+       (reduce clojure.core/+)
        (math/sqrt)))
 
-(s/fdef vector-magnitude
+(s/fdef magnitude
   :args (s/cat :v ::tuple3d)
   :ret (s/double-in :min 0.0 :NaN? false :infinite false))
 
-(defn vector-normalization [v]
-  (let [magnitude (vector-magnitude v)]
+(defn normalize [v]
+  (let [magnitude (magnitude v)]
     (try
       (update-map #(/ % magnitude) v)
       (catch ArithmeticException e
         { :x 0.0 :y 0.0 :z 0.0}))))
 
 
-(s/fdef vector-normalization
+(s/fdef normalize
   :args (s/cat :v ::tuple3d)
   :ret ::tuple3d
   :fn (s/or
-       :unit #(aprox (vector-magnitude (:ret %)) 1.0)
-       :zero #(aprox (vector-magnitude (:ret %)) 0.0)))
+       :unit #(aprox (magnitude (:ret %)) 1.0)
+       :zero #(aprox (magnitude (:ret %)) 0.0)))
