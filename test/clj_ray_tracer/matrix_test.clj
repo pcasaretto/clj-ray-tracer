@@ -142,4 +142,12 @@
                    [1 2 6]
                    [-5 8 -4]
                    [2 6 4]]]
-        (t/is (= -196 (sut/determinant in))))))
+        (t/is (= -196 (sut/determinant in)))))
+  (t/testing "determinant for a 4x4 matrix"
+    (let
+        [in       [
+                   [-2 -8 3 5]
+                   [-3 1 7 3]
+                   [1 2 -9 6]
+                   [-6 7 7 -9]]]
+        (t/is (= -4071 (sut/determinant in))))))

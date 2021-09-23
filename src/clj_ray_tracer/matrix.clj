@@ -84,12 +84,12 @@
         (clojure.core/* (get-in m [ 1 0 ]) (get-in m [ 0 1]))))
 
 (defn determinant3 [m]
-  (clojure.core/+
-    (clojure.core/* (get-in m [0 0]) (cofactor m 0 0))
-    (clojure.core/* (get-in m [0 1]) (cofactor m 0 1))
-    (clojure.core/* (get-in m [0 2]) (cofactor m 0 2))))
+  (->>
+    (range (height m))
+    (map #(clojure.core/* (get-in m [0 %]) (cofactor m 0 %)))
+    (reduce +)))
 
 (defn determinant [m]
   (cond
     (= (width m) 2) (determinant2 m)
-    (= (width m) 3) (determinant3 m)))
+    (>= (width m) 3) (determinant3 m)))
