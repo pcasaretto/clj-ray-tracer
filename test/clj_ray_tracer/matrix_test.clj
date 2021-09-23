@@ -130,9 +130,16 @@
              (sut/cofactor in 1 0))))))
 
 (t/deftest determinant-test
-  (t/testing "simple determinant specs"
+  (t/testing "determinant for a 2x2 matrix"
     (let
         [in       [
                    [1 5]
                    [-3 2]]]
-        (t/is (= 17 (sut/determinant in))))))
+        (t/is (= 17 (sut/determinant in)))))
+  (t/testing "determinant for a 3x3 matrix"
+    (let
+        [in       [
+                   [1 2 6]
+                   [-5 8 -4]
+                   [2 6 4]]]
+        (t/is (= -196 (sut/determinant in))))))

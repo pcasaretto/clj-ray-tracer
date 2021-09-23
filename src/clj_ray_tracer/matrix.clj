@@ -62,11 +62,7 @@
             (keep-indexed (fn [current-column column] (if (not= current-column exclude-column) column)) row))))
        m)))
 
-(defn determinant [m]
-  (clojure.core/-
-    (clojure.core/* (get-in m [ 0 0 ]) (get-in m [ 1 1]))
-    (clojure.core/* (get-in m [ 1 0 ]) (get-in m [ 0 1]))))
-
+(declare determinant)
 (defn minor [m exclude-row exclude-column]
   (-> m
       (submatrix exclude-row exclude-column)
@@ -81,3 +77,19 @@
   (let
       [minor (minor m row column)]
       (if (diagonal? row column) minor (- minor))))
+
+(defn determinant2 [m]
+    (clojure.core/-
+        (clojure.core/* (get-in m [ 0 0 ]) (get-in m [ 1 1]))
+        (clojure.core/* (get-in m [ 1 0 ]) (get-in m [ 0 1]))))
+
+(defn determinant3 [m]
+  (clojure.core/+
+    (clojure.core/* (get-in m [0 0]) (cofactor m 0 0))
+    (clojure.core/* (get-in m [0 1]) (cofactor m 0 1))
+    (clojure.core/* (get-in m [0 2]) (cofactor m 0 2))))
+
+(defn determinant [m]
+  (cond
+    (= (width m) 2) (determinant2 m)
+    (= (width m) 3) (determinant3 m)))
