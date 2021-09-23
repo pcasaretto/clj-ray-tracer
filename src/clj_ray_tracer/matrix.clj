@@ -72,4 +72,12 @@
       (submatrix exclude-row exclude-column)
       (determinant)))
 
-(defn cofactor [m row colum])
+(defn- diagonal?
+  [row column]
+  (even? (+ row column)))
+
+(defn cofactor
+  [m row column]
+  (let
+      [minor (minor m row column)]
+      (if (diagonal? row column) minor (- minor))))
