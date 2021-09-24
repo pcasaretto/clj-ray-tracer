@@ -14,13 +14,18 @@
 (defn column [m column-number]
   (mapv #(get % column-number) m))
 
+(defn element-apply [m f]
+  (mapv #(mapv f %) m))
+
 (defn * [left right]
-  (for [line-number (range 0 (height left))]
-    (for [column-number (range 0 (width right))]
-      (->> (interleave (line left line-number) (column right column-number))
-           (partition 2)
-           (map (partial apply clojure.core/*))
-           (reduce +)))))
+  (vec
+    (for [line-number (range 0 (height left))]
+      (vec
+        (for [column-number (range 0 (width right))]
+          (->> (interleave (line left line-number) (column right column-number))
+              (partition 2)
+              (map (partial apply clojure.core/*))
+              (reduce +)))))))
 
 (s/def ::double
   (s/double-in :NaN? false :infinite? false))
@@ -40,8 +45,8 @@
       (vec
         (for [j (range 0 size)]
           (if (= i j)
-            1
-            0))))))
+            1.0
+            0.0))))))
 
 (defn transpose [m]
   (vec
@@ -96,3 +101,39 @@
 
 (defn invertible? [m]
   (not (zero? (determinant m))))
+
+(defn cofactor-matrix [m]
+  (let [size (height m)]
+    (vec
+        (for [i (range 0 size)]
+          (vec
+            (for [j (range 0 size)]
+              (cofactor m i j)))))))
+
+(defn inverse [m]
+  (let
+      [det (determinant m)]
+    (-> m
+          cofactor-matrix
+          transpose
+          (element-apply #(/ % det)))))
+
+(def in [
+          [-5.0 2.0 6.0 -8.0]
+          [1.0 -5.0 1.0 8.0]
+          [7.0 7.0 -6.0 -7.0]
+          [1.0 -3.0 7.0 4.0]])
+
+(defn vec->matrix
+  [v]
+  [(vec (vals (select-keys v [:x :y :z])))])
+
+(defn matrix->vec
+  [m]
+  {:x (get-in m [0 0])
+   :x (get-in m [0 1])
+   :x (get-in m [0 2])})
+
+(-> in
+  inverse
+  (* in))
