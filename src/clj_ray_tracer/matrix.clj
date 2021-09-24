@@ -93,3 +93,6 @@
   (cond
     (= (width m) 2) (determinant2 m)
     (>= (width m) 3) (determinant3 m)))
+
+(defn invertible? [m]
+  (not (zero? (determinant m))))

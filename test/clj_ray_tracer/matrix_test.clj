@@ -151,3 +151,21 @@
                    [1 2 -9 6]
                    [-6 7 7 -9]]]
         (t/is (= -4071 (sut/determinant in))))))
+
+(t/deftest invertible-test
+  (t/testing "test case for a non-invertible 4x4 matrix"
+    (let
+        [in       [
+                   [-4 2 -2 -3]
+                   [9 6 2 6]
+                   [0 -5 1 -5]
+                   [0 0 0 0]]]
+        (t/is (not (sut/invertible? in)))))
+  (t/testing "test case for a invertible 4x4 matrix"
+    (let
+        [in       [
+                   [6 4 4 4]
+                   [5 5 7 6]
+                   [4 -9 3 -7]
+                   [9 1 7 -6]]]
+        (t/is (sut/invertible? in)))))
