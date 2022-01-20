@@ -1,4 +1,5 @@
 (ns clj-ray-tracer.color
+  (:refer-clojure :exclude [+ - * =])
   (:require [clojure.spec.alpha :as s]
             [clojure.math.numeric-tower :as math]
             [clj-ray-tracer.vector :as vector]
@@ -49,7 +50,7 @@
   :ret ::color)
 
 (defn scalar-multiply [color factor]
-  (vector/update-map (partial * factor) color))
+  (vector/update-map (partial clojure.core/* factor) color))
 
 (s/fdef scalar-multiply
   :args (s/cat :color ::color :factor int?)

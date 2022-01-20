@@ -1,4 +1,5 @@
 (ns clj-ray-tracer.vector
+  (:refer-clojure :exclude [+ -])
   (:require [clojure.spec.alpha :as s]
             [clojure.math.numeric-tower :as math]))
 
@@ -15,7 +16,7 @@
 
 (defn aprox [x y]
   (->
-   (- x y)
+   (clojure.core/- x y)
    math/abs
    (<= epsilon)))
 

@@ -1,4 +1,5 @@
 (ns clj-ray-tracer.matrix
+  (:refer-clojure :exclude [* identity])
   (:require [clojure.spec.alpha :as s]
             [clojure.test.check.generators :as gen]))
 
@@ -126,13 +127,9 @@
 
 (defn vec->matrix
   [v]
-  [(vec (vals (select-keys v [:x :y :z])))])
+  [(conj (vec (vals (select-keys v [:x :y :z]))) 0)])
 
-(defn matrix->vec
-  [m]
-  {:x (get-in m [0 0])
-   :x (get-in m [0 1])
-   :x (get-in m [0 2])})
+(vec->matrix {:x 1 :y 34 :z 9})
 
 (-> in
   inverse
