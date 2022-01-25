@@ -6,9 +6,7 @@
             [clj-ray-tracer.vector :as vector])
   (:gen-class))
 
-
-(defn -main
-  [& args]
+(defn clock
   (let
     [canvas (canvas/canvas :width 150 :height 150)
      color (color/color :red 255.0 :green 0.0 :blue 0.0)
@@ -22,3 +20,8 @@
              (reduce (fn [c pixel] ( canvas/assoc-pixel c [(:x pixel) (:y pixel)] color) ) canvas))
      bitmap (ppm/canvas->ppm canvas)]
     (println bitmap)))
+
+
+
+(defn -main
+  [& args])

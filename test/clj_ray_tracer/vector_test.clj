@@ -5,8 +5,6 @@
             [clojure.spec.test.alpha :as stest]
             [clj-ray-tracer.vector :as sut]))
 
-(-> (stest/enumerate-namespace `clj-ray-tracer.vector) stest/check)
-
 (deftest ish?-test
   (testing "equal vectors are aproximately equal"
     (let
@@ -115,3 +113,5 @@
           (-> (gen/generate (s/gen ::sut/tuple3d))
               (sut/normalize)
               (sut/magnitude))))))
+
+(-> (stest/enumerate-namespace `clj-ray-tracer.vector) stest/check)

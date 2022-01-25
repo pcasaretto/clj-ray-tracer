@@ -12,6 +12,10 @@
 (defn update-map [f m]
   (reduce (fn [altered-map [k v]] (assoc altered-map k (f v))) {} m))
 
+(defn scalar-*
+  [v factor]
+  (update-map (partial * factor) v))
+
 (def epsilon 1e-10)
 
 (defn aprox [x y]
