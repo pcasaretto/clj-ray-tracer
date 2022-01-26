@@ -20,11 +20,11 @@
       (t/is (=
               {:x 3 :y 3 :z 4}
               (sut/position ray time)))))
-  (testing "identity property (at time 0, there is no change)"
+  (t/testing "identity property (at time 0, there is no change)"
     (let
       [r (gen/generate (s/gen ::sut/ray))]
-      (is (=
-           (:origin r)
-           (sut/position r 0))))))
+      (t/is (=
+             (:origin r)
+             (sut/position r 0))))))
 
 (-> (stest/enumerate-namespace `clj-ray-tracer.ray) stest/check)

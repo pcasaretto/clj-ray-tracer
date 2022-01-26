@@ -114,4 +114,23 @@
               (sut/normalize)
               (sut/magnitude))))))
 
+(deftest dot-product-test
+  (testing "simple vector dot product"
+    (let [a {:x 1.0 :y 2.0 :z 3.0}
+          b {:x 2.0 :y 3.0 :z 4.0}]
+        (is (=
+             20.0
+             (sut/dot-product a b))))))
+
+(deftest cross-product-test
+  (testing "simple vector cross product"
+    (let [a {:x 1.0 :y 2.0 :z 3.0}
+          b {:x 2.0 :y 3.0 :z 4.0}]
+        (is (=
+             {:x -1.0 :y 2.0 :z -1.0}
+             (sut/cross-product a b)))
+        (is (=
+             {:x 1.0 :y -2.0 :z 1.0}
+             (sut/cross-product b a))))))
+
 (-> (stest/enumerate-namespace `clj-ray-tracer.vector) stest/check)

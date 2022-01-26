@@ -38,6 +38,28 @@
   :args (s/cat :v1 ::tuple3d :v2 ::tuple3d)
   :ret boolean?)
 
+(defn cross-product
+  [v1 v2]
+  {:x (clojure.core/- (* (:y v1) (:z v2)) (* (:z v1) (:y v2)))
+   :y (clojure.core/- (* (:z v1) (:x v2)) (* (:x v1) (:z v2)))
+   :z (clojure.core/- (* (:x v1) (:y v2)) (* (:y v1) (:x v2)))})
+
+(s/fdef cross-product
+  :args (s/cat :v1 ::tuple3d :v2 ::tuple3d)
+  :ret ::tuple3d)
+
+(defn dot-product
+  [v1 v2]
+  (->> [v1 v2]
+    (map #(-> % (select-keys [:x :y :z]) vals))
+    (apply map clojure.core/vector)
+    (map #(reduce * %))
+    (reduce clojure.core/+)))
+
+(s/fdef dot-product
+  :args (s/cat :v1 ::tuple3d :v2 ::tuple3d)
+  :ret float?)
+
 (defn +
   ( [v1] v1)
   ( [ v1 & more]

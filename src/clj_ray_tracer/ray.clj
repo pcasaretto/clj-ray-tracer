@@ -16,7 +16,7 @@
     (#(apply vector/+ %))))
 
 (s/fdef position
-        :args (s/cat :ray ::ray :time (s/and int? #(> % 0)))
+        :args (s/cat :ray ::ray :time (s/and float? #(> % 0)))
         :ret ::vector/tuple3d
         :fn (fn [spec] (cond
                         (= (-> spec :args :time) 0) (= (:ret spec) (-> spec :args :ray))
