@@ -6,20 +6,35 @@
   [point]
   [ [(:x point)] [(:y point)] [(:z point)] [1]])
 
-(defn matrix->point
+(defn vector->matrix
+  [point]
+  [ [(:x point)] [(:y point)] [(:z point)] [0]])
+
+(defn tuple4d->point
   [matrix]
   {:x (get-in matrix [0 0])
    :y (get-in matrix [1 0])
    :z (get-in matrix [2 0])})
 
-(defn apply
+(def identity (matrix/identity 4))
+
+(defn transform-point
   [point & transforms]
   (let
       [resulting-transforms (->> transforms vec rseq (reduce matrix/*))]
     (->> point
            point->matrix
            (matrix/* resulting-transforms)
-           matrix->point)))
+           tuple4d->point)))
+
+(defn transform-vector
+  [point & transforms]
+  (let
+      [resulting-transforms (->> transforms vec rseq (reduce matrix/*))]
+    (->> point
+           vector->matrix
+           (matrix/* resulting-transforms)
+           tuple4d->point)))
 
 (defn translation
   [spec]
@@ -64,7 +79,3 @@
    [yx 1 yz 0]
    [zx zy 1 0]
    [0 0 0 1]])
-
-(defn foo
-  [a & rest]
-  (println a (rseq (vec rest))))
