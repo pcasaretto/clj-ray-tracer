@@ -17,7 +17,6 @@
         b (* 2 (vector/dot-product direction sphere-to-ray))
         c (- (vector/dot-product sphere-to-ray sphere-to-ray) 1)
         discriminant (- (* b b) (reduce * [4 a c]))]
-    (println a b c discriminant)
     (cond
      (< discriminant 0) '()
      :else (let [t1 (/ (- (- b) (Math/sqrt discriminant)) (* 2 a))

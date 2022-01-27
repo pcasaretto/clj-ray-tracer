@@ -24,4 +24,14 @@
 
 
 (defn -main
-  [& args])
+  [& args]
+  (let
+    [ray-origin {:x 0 :y 0 :z -5}
+     wall-z 10
+     wall-size 7.0
+     canvas-pixels 100
+     canvas (canvas/canvas :width canvas-pixels :height canvas-pixels)
+     pixel-size (/ wall-size canvas-pixels)
+     half (/ wall-size 2)
+     color (color/color :red 255.0 :green 0.0 :blue 0.0)
+     shape {}]))

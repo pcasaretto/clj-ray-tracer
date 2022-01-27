@@ -39,7 +39,7 @@
   (t/testing "scaling a ray"
     (let
         [ray {:origin {:x 1 :y 2 :z 3} :direction {:x 0 :y 1 :z 0}}
-         transformation (transform/scaling {:x 3 :y 4 :z 5})]
+         transformation (transform/scaling {:x 2 :y 3 :z 4})]
       (t/is (=
               {:origin {:x 2 :y 6 :z 12} :direction {:x 0 :y 3 :z 0}}
               (sut/transform ray transformation))))))
